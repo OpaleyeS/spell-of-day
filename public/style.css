@@ -1,0 +1,436 @@
+/* =============================================================================
+   RESET
+   ============================================================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* =============================================================================
+   CSS VARIABLES 
+   ============================================================================= */
+:root {
+    /* Colors */
+    --primary-dark:    #011627;
+    --primary-scepter: #795663;
+    --primary-dusk:    #d9bcaf;
+    --primary-cream:   #f4e4c1;
+    --accent-thistle:  #8a9688;
+    --text-dark:       #2c1810;
+    --text-light:      #f4e4c1;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+
+    /* Typography */
+    --font-display: 'MedievalSharp', cursive;
+    --font-body:    'Roboto', sans-serif;
+
+    /* Shadows */
+    --shadow-sm:    0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md:    0 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-lg:    0 8px 16px rgba(0, 0, 0, 0.2);
+    --shadow-spell: 0 10px 30px rgba(201, 168, 124, 0.3);
+}
+
+/* =============================================================================
+   BASE
+   ============================================================================= */
+body {
+    font-family: var(--font-body);
+    background: var(--primary-dark);
+    color: var(--text-dark);
+    min-height: 100vh;
+    line-height: 1.6;
+    padding: var(--spacing-md);
+}
+
+/* =============================================================================
+   TYPOGRAPHY
+   ============================================================================= */
+h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: 1px;
+}
+
+.main-title {
+    font-size: 2.5rem;
+    color: var(--primary-dusk);
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: var(--spacing-xs);
+    animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+    0%, 100% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); }
+    50%       { text-shadow: 0 0 20px var(--primary-dusk), 2px 2px 4px rgba(0, 0, 0, 0.3); }
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--primary-cream);
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-xl);
+    font-style: italic;
+}
+
+/* =============================================================================
+   LAYOUT
+   ============================================================================= */
+main {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* =============================================================================
+   SPELL CARD
+   ============================================================================= */
+.spell-card {
+    background: rgba(244, 228, 193, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-spell);
+    border: 1px solid var(--primary-dusk);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Decorative lightning bolt watermark */
+.spell-card::before {
+    content: '⚡';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 150px;
+    opacity: 0.1;
+    transform: rotate(15deg);
+    pointer-events: none;
+}
+
+.spell-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(201, 168, 124, 0.4);
+}
+
+/* Applied by app.js when an error occurs */
+.spell-card.faded {
+    opacity: 0.5;
+}
+
+.spell-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--primary-dusk);
+}
+
+.spell-name {
+    font-size: 2rem;
+    color: var(--primary-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* =============================================================================
+   SPELL SECTION & DESCRIPTION
+   ============================================================================= */
+.spell-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.spell-section h3 {
+    color: var(--primary-scepter);
+    font-size: 1.3rem;
+    margin-bottom: var(--spacing-sm);
+    border-left: 4px solid var(--accent-thistle);
+    padding-left: var(--spacing-sm);
+}
+
+.spell-description {
+    background: white;
+    padding: var(--spacing-lg);
+    border-radius: 10px;
+    line-height: 1.8;
+    box-shadow: var(--shadow-sm);
+    font-size: 1.1rem;
+}
+
+.spell-description p {
+    margin-bottom: var(--spacing-md);
+}
+
+.spell-description p:last-child {
+    margin-bottom: 0;
+}
+
+/* =============================================================================
+   CRUD ACTION BUTTONS  (like + delete)
+   Hidden by default; app.js adds .visible once a spell loads.
+   ============================================================================= */
+.spell-actions {
+    display: none;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+/* app.js adds this class to show the buttons */
+.spell-actions.visible {
+    display: flex;
+}
+
+/* Like button — default (not liked) state */
+.like-btn {
+    background: var(--primary-scepter);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-md);
+}
+
+.like-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+    background: #9b6875;
+}
+
+/* app.js adds .liked when the spell has been liked */
+.like-btn.liked {
+    background: #c0392b;
+}
+
+.like-btn.liked:hover:not(:disabled) {
+    background: #e74c3c;
+}
+
+.like-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Delete button */
+.delete-btn {
+    background: transparent;
+    color: var(--primary-scepter);
+    border: 2px solid var(--primary-scepter);
+    padding: 0.6rem 1.4rem;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.delete-btn:hover:not(:disabled) {
+    background: var(--primary-scepter);
+    color: white;
+    transform: scale(1.05);
+}
+
+.delete-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* =============================================================================
+   LOADING INDICATOR
+   Hidden by default; app.js adds .active to show it.
+   ============================================================================= */
+.loading {
+    display: none;
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.loading.active {
+    display: block;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--primary-dusk);
+    border-top: 4px solid var(--accent-thistle);
+    border-radius: 50%;
+    margin: 0 auto var(--spacing-md);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* =============================================================================
+   ERROR MESSAGE
+   Hidden by default; app.js adds .visible to show it.
+   ============================================================================= */
+.error-message {
+    display: none;
+    background: var(--accent-thistle);
+    color: white;
+    padding: var(--spacing-lg);
+    border-radius: 10px;
+    text-align: center;
+    margin: var(--spacing-lg) 0;
+}
+
+/* app.js adds this class to reveal the error panel */
+.error-message.visible {
+    display: block;
+}
+
+.retry-btn {
+    background: white;
+    color: var(--accent-thistle);
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: 5px;
+    margin-top: var(--spacing-md);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.retry-btn:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+/* =============================================================================
+   ACTION SECTION  (Refresh button)
+   ============================================================================= */
+.action-section {
+    text-align: center;
+    margin-top: var(--spacing-xl);
+}
+
+.refresh-btn {
+    background: var(--primary-dusk);
+    color: var(--primary-dark);
+    border: none;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-md);
+}
+
+.refresh-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+    background: var(--primary-cream);
+    box-shadow: var(--shadow-lg);
+}
+
+.refresh-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.refresh-note {
+    color: var(--primary-cream);
+    font-size: 0.9rem;
+    margin-top: var(--spacing-sm);
+    opacity: 0.8;
+}
+
+/* =============================================================================
+   OFFLINE CACHE BANNER
+   Created dynamically by app.js but styled here.
+   ============================================================================= */
+.cache-note {
+    text-align: center;
+    color: var(--primary-cream);
+    font-size: 0.9rem;
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: rgba(121, 86, 99, 0.3);
+    border-radius: 5px;
+}
+
+/* =============================================================================
+   TOAST NOTIFICATION
+   Created dynamically by app.js but styled here.
+   app.js adds .toast-visible to trigger the slide-up animation.
+   ============================================================================= */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(1, 22, 39, 0.92);
+    color: var(--primary-cream);
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    font-size: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 9999;
+    white-space: nowrap;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(244, 228, 193, 0.2);
+}
+
+.toast.toast-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* =============================================================================
+   FOOTER
+   ============================================================================= */
+footer {
+    text-align: center;
+    color: var(--primary-cream);
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(244, 228, 193, 0.3);
+}
+
+/* =============================================================================
+   ANIMATIONS
+   ============================================================================= */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =============================================================================
+   RESPONSIVE
+   ============================================================================= */
+@media (max-width: 600px) {
+    .main-title {
+        font-size: 2rem;
+    }
+
+    .spell-card {
+        padding: var(--spacing-lg);
+    }
+
+    .spell-name {
+        font-size: 1.5rem;
+    }
+}
